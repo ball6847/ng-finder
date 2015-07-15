@@ -15,13 +15,14 @@ angular.module('ngFinder', [])
         return {
             restrict: 'C',
             scope: {
-                'url'      : '=url',
-                'onSelect'  : '&select'
+              'url' : '=url',
+              'options' : '=options',
+              'onSelect' : '&select'
             },
             controller: ['$scope', function($scope) {
                 // for TinyMCE integration
                 $scope.selectFile = function(url) {
-                    var aFieldName = $scope.$parent.fieldName, 
+                    var aFieldName = $scope.$parent.fieldName,
                         aWin = $scope.$parent.window;
 
                     aWin.document.forms[0].elements[aFieldName].value = url;
@@ -53,8 +54,14 @@ angular.module('ngFinder', [])
                         getfile: {
                             onlyURL: false
                         }
-                    }
+                    },
+                    useBrowserHistory: false
                 };
+
+                if (scope.options) {
+                  $.extend(options, scope.options);
+                }
+
                 if (attrs.select) {
                     options.contextmenu.files.unshift('getfile');
                     options.onlyMimes = ["image"];
